@@ -10,6 +10,7 @@ public class MainCRUD {
     
     public static void main(String[] args) {
         
+        // *TESTES*
         CarDao garagem = new CarDao();
         Car fusca = new Car();
         

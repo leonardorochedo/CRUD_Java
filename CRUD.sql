@@ -22,4 +22,3 @@ INSERT INTO Veiculos (modelo, ano, preco) VALUES
 ("HB20", 2021, 50000.00);
 
 SELECT * FROM Veiculos;
-DELETE FROM Veiculos WHERE id = 7;
