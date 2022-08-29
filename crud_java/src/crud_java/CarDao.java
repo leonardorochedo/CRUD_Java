@@ -13,6 +13,10 @@ import java.util.logging.Logger;
  * @author Leonardo Rochedo
  */
 public class CarDao implements DaoInterface {
+    // Classe que vamos criar o elemento, puxando a interface Dao que criamos
+    
+    // Aqui estao os metodos que utilizamos para inserir, apagar...
+    
     private Connection connection;
     private PreparedStatement comand;
     private ResultSet resultSet;

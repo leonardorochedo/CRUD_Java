@@ -11,14 +11,15 @@ import java.util.logging.Logger;
  * @author Leonardo Rochedo
  */
 public class CreateConnection {
-private String url = "jdbc:mysql://localhost/crud";
+    // LEMBRE DE IMPORTAR O mysql-connector-java
+    
+    private String url = "jdbc:mysql://localhost/crud"; // Localizando o banco do mysql da maquina
     private String user = "root";
     private String pass = "leo123321"; // Senha do seu MySql
     
     public Connection getConnection() {
         try {
             try {
-                //DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
                 Class.forName("com.mysql.cj.jdbc.Driver");
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CreateConnection.class.getName()).log(Level.SEVERE, null, ex);

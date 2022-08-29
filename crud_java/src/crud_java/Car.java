@@ -5,11 +5,13 @@ package crud_java;
  * @author Leonardo Rochedo
  */
 public class Car {
+    // Definindo o tipo dos dados
     private int id;
     private String model;
     private int year;
     private double price;
     
+    // Metodos construtores
     public Car() {
         
     }
@@ -21,6 +23,7 @@ public class Car {
         this.price = price;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }

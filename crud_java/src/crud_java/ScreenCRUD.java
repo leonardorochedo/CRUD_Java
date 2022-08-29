@@ -14,8 +14,9 @@ import javax.swing.table.TableModel;
  */
 public class ScreenCRUD extends javax.swing.JFrame {
 
-    CarDao garagem = new CarDao();
+    CarDao garagem = new CarDao(); // Criando um elemento da classe CarDao
     
+    // Metodo construtor
     public ScreenCRUD() {
         initComponents();
         initialGrid();
@@ -23,23 +24,25 @@ public class ScreenCRUD extends javax.swing.JFrame {
     }
     
     public void initialGrid() {
-        // 1- Definir header
+        // 1- Definir header (nome das colunas)
         Vector header = new Vector();
         header.add("ID");//
         header.add("Modelo");
         header.add("Ano");
         header.add("Preço");
         
-        // 2- Carrega os dados
+        // 2- Carrega os dados da tabela no MySql
         CarDao garagem = new CarDao();
-        List<Car> list = garagem.getAll();
+        List<Car> list = garagem.getAll(); // Pegando todos os dados da tabela
         
-        Vector dados = new Vector();
+        Vector dados = new Vector(); // Cria um vetor para inserir os dados
+        
+        // Povoando a tabela com os dados do MySql
         for(int i=0; i<list.size(); i++) {
             Car car = list.get(i);
             
             Vector row = new Vector();
-            row.add(car.getId()); // ID
+            row.add(car.getId());
             row.add(car.getModel());
             row.add(Integer.toString(car.getYear()));
             row.add(Double.toString(car.getPrice()));
@@ -48,28 +51,30 @@ public class ScreenCRUD extends javax.swing.JFrame {
         
         // 3- Montar no jTable
         TableModel dataModel = new DefaultTableModel (dados, header);
-        jTable1.setModel(dataModel);
+        jTable1.setModel(dataModel); // Setando tudo no jTable1 do jFrame
     }
 
     private class addClick implements MouseListener {
-        
+        // Cirando a classe puxando do MouseListener
         @Override
         public void mouseClicked(MouseEvent e) {
-        int rowSelected = jTable1.getSelectedRow();
-        System.out.println(rowSelected);
+            // Quando o mouse clicar no jFrame ele vai:
+            int rowSelected = jTable1.getSelectedRow(); // Pegar a linha selecionada
             
-        int id = (Integer) jTable1.getValueAt(rowSelected, 0);//
-        String model = (String) jTable1.getValueAt(rowSelected, 1);
-        String year = (String) jTable1.getValueAt(rowSelected, 2);
-        String price = (String) jTable1.getValueAt(rowSelected, 3);
+            // Pegar os valores do elemento que a linha selecionou
+            int id = (Integer) jTable1.getValueAt(rowSelected, 0);
+            String model = (String) jTable1.getValueAt(rowSelected, 1);
+            String year = (String) jTable1.getValueAt(rowSelected, 2);
+            String price = (String) jTable1.getValueAt(rowSelected, 3);
             
-        // Inserindo nos text field
-        jLabel5.setText(String.valueOf(id)); // ID
-        jTextField1.setText(model);
-        jTextField2.setText(year);
-        jTextField3.setText(price);
+            // E Inserir nos text field
+            jLabel5.setText(String.valueOf(id));
+            jTextField1.setText(model);
+            jTextField2.setText(year);
+            jTextField3.setText(price);
         }
         
+        // Metodos extras do MouseListener
         @Override
         public void mousePressed(MouseEvent e) {
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -233,25 +238,32 @@ public class ScreenCRUD extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        // Deleta elemento
         Car removeCar = new Car();
         
         // Pegando o model do TextField
         String removeId = jLabel5.getText();
         String removeModel = jTextField1.getText();
         
-        // Set
-        removeCar.setId(Integer.parseInt(removeId));
-        removeCar.setModel(removeModel);
+        // Filtrando os dados para deletar
+        try {
+            // Setando os elementos
+            removeCar.setId(Integer.parseInt(removeId));
+            removeCar.setModel(removeModel);
         
-        garagem.removeElement(removeCar); // Remove
-        
+            garagem.removeElement(removeCar); // Removendo elemento da tabela
         JOptionPane.showMessageDialog(jTable1, removeModel + " Removido com sucesso!!!"); // Cria o OptionPane
+        } catch(NumberFormatException error) {
+            // Se o ID estiver vazio
+            JOptionPane.showMessageDialog(jTable1, "[ERRO] ID inexistente! Insira o elemento e tente novamente!!!");
+        }
+        
+        initialGrid(); // Dando um refresh na table
         
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+        // Atualizar elemento
         Car refreshCar = new Car();
         
         // Pegando os elementos do carro
@@ -260,20 +272,27 @@ public class ScreenCRUD extends javax.swing.JFrame {
         String refreshYear = jTextField2.getText();
         String refreshPrice = jTextField3.getText();
         
-        // Setando no newCar
-        refreshCar.setId(Integer.parseInt(removeId));
-        refreshCar.setModel(refreshModel);
-        refreshCar.setYear(Integer.parseInt(refreshYear));
-        refreshCar.setPrice(Double.parseDouble(refreshPrice));
+        // Filtrando os dados para a atualizacao da tabela
+        try {
+            // Setando os dados no refreshCar
+            refreshCar.setId(Integer.parseInt(removeId));
+            refreshCar.setModel(refreshModel);
+            refreshCar.setYear(Integer.parseInt(refreshYear));
+            refreshCar.setPrice(Double.parseDouble(refreshPrice));
+            
+            garagem.refreshElement(refreshCar); // Atualizando na tabela
+            JOptionPane.showMessageDialog(jTable1, refreshModel + " Atualizado com Sucesso!!"); // OptionPane
+        } catch(NumberFormatException error) {
+            // Se o dado inserido não estiver correto
+            JOptionPane.showMessageDialog(jTable1, "[ERRO] Dado inserido incorretamente! Corriga e tente novamente!!!");
+        }
         
-        garagem.refreshElement(refreshCar); // Atualizar
-        
-        JOptionPane.showMessageDialog(jTable1, refreshModel + " Atualizado com Sucesso!!");
+        initialGrid(); // Dando um refresh na table
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        // Inserir elemento
         Car newCar = new Car(); // Criando o carro
         
         // Pegando os valores do Text Field
@@ -281,17 +300,25 @@ public class ScreenCRUD extends javax.swing.JFrame {
         String newYear = jTextField2.getText();
         String newPrice = jTextField3.getText();
         
-        // Setando no newCar
-        newCar.setModel(newModel);
-        newCar.setYear(Integer.parseInt(newYear));
-        newCar.setPrice(Double.parseDouble(newPrice));
+        // Filtrando os dados para a insercao
+        try {
+            // Setando no newCar
+            newCar.setModel(newModel);
+            newCar.setYear(Integer.parseInt(newYear));
+            newCar.setPrice(Double.parseDouble(newPrice));
         
-        garagem.insertElement(newCar); // Inserir
+            garagem.insertElement(newCar); // Inserindo na tabela
+            JOptionPane.showMessageDialog(jTable1, newModel + " Inserido com Sucesso!!!"); // OptionPane
+        } catch(NumberFormatException error) {
+            // Se o dado inserido não estiver correto
+            JOptionPane.showMessageDialog(jTable1, "[ERRO] Dado inserido incorretamente! Corriga e tente novamente!!!");
+        }
         
-        JOptionPane.showMessageDialog(jTable1, newModel + " Inserido com Sucesso!!!");
+        initialGrid(); // Dando um refresh na table
         
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    // Main, deixa o jFrame visivel
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
